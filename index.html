@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="kr">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,45 +8,58 @@
     <title>262페이지 9번 문제</title>
 
     <link href="font.css" rel="stylesheet">
+    <link href="animation.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
 </head>
+
 <body>
     <div id="root"></div>
-    
+
     <!--using react-->
     <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
 
     <script type="text/babel">
-        function Header({ index=1 }) {
+        function Header({ index = 0 }) {
             return (
                 <header className="border">
                     <span>집합 A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'} 의 부분집합 중에서 다음을 구하시오</span>
+                    <br />
+                    {index == 0 ? <span>(1) 원소의 개수가 4이고 1을 반드시 원소로 갖는 집합의 개수</span> : null}
+                    {index == 1 ? <span>(2) 원소의 개수가 3이고 적어도 한 개의 원소로 갖는 집합의 개수</span> : null}
                 </header>
             )
         }
     </script>
     <script type="text/babel">
-        function Account() {
+        function Account({ index = 0 }) {
+            const lines = [
+                <span className="line">집합 B는 문제의 조건을 충족하는 임의의 집합이다</span>,
+                <span className="line">B = {'{'}9, □, □, □{'}'}</span>
+            ]
             return (
                 <article id="account">
-                    <p className="line">집합 B는 문제의 조건을 충족하는 임의의 집합이다.</p>
+                    {lines.filter((line, i) => i < index)}
                 </article>
             )
         }
     </script>
     <script type="text/babel">
         function App() {
+            const [index, setIndex] = React.useState(0)
+            const onClick = () => setIndex(prev => prev + 1)
+            console.log(index)
             return (
-                <React.Fragment>
-                    <Header />
-                    <Account />
-                </React.Fragment>
+                <div onClick={onClick}>
+                    <Header index={0} />
+                    <Account index={index} />
+                </div>
             )
         }
         const root = ReactDOM.createRoot(document.getElementById('root'))
         root.render(<App />)
     </script>
 </body>
+
 </html>

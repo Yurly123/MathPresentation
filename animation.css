@@ -1,0 +1,11 @@
+@keyframes line-appear {
+    from {
+        transform: translate(0%, 50%);
+        opacity: 0%;
+    }
+
+    to {
+        transform: translate(0%, 0%);
+        opacity: 100%;
+    }
+}
