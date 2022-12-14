@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>262페이지 9번 문제</title>
+
+    <link href="font.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <div id="root"></div>
+    
+    <!--using react-->
+    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+
+    <script type="text/babel">
+        function Header({ index=1 }) {
+            return (
+                <header className="border">
+                    <span>집합 A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'} 의 부분집합 중에서 다음을 구하시오</span>
+                </header>
+            )
+        }
+    </script>
+    <script type="text/babel">
+        function Account() {
+            return (
+                <article id="account">
+                    <p className="line">집합 B는 문제의 조건을 충족하는 임의의 집합이다.</p>
+                </article>
+            )
+        }
+    </script>
+    <script type="text/babel">
+        function App() {
+            return (
+                <React.Fragment>
+                    <Header />
+                    <Account />
+                </React.Fragment>
+            )
+        }
+        const root = ReactDOM.createRoot(document.getElementById('root'))
+        root.render(<App />)
+    </script>
+</body>
+</html>
