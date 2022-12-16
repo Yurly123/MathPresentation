@@ -9,3 +9,16 @@
         opacity: 100%;
     }
 }
+
+@keyframes line-disappear {
+    from {
+        display: contents;
+        opacity: 100%;
+    }
+
+    to {
+        opacity: 0%;
+        display: none;
+        transform: translate(0%, -50%);
+    }
+}

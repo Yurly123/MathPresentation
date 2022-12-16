@@ -36,5 +36,10 @@ header * {
     width: 100%;
     font-family: LINESeedKR-Bd;
     font-size: 4.5vmin;
-    animation: line-appear 1s;
+    animation: line-appear 1s ease-in-out;
+}
+
+.line-disappear {
+    transition: display 1s;
+    animation: line-disappear 1s ease-in-out forwards;
 }
