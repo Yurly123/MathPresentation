@@ -36,38 +36,47 @@
         const LINE_CLASSNAME = 'line'
         const LINE_DISAPPEAR_CLASSNAME = 'line-disappear'
 
+        function makeDisappear(statement) {
+            statement.props.className += ' ' + LINE_DISAPPEAR_CLASSNAME
+            return statement
+        }
+        function modifyLine(statement, content)
+        {
+            statement.props.children = []
+            content.props.children.forEach((child) => {
+                statement.props.children.push(child)
+            })
+            return statement
+        }
+
         function Account() {
             const [index, setIndex] = React.useState(0)
-            const [statements, setStatements] = React.useState([
+            const statements = [
                 <span className={LINE_CLASSNAME}>집합 B는 문제의 조건을 충족하는 임의의 집합이다</span>,
                 <span className={LINE_CLASSNAME}>B = {'{'}9, □, □, □{'}'}</span>,
                 <span className={LINE_CLASSNAME}>Other lines</span>,
-            ])
-            const [lines, setLines] = React.useState()
-            React.useEffect(() => {
-                switch (index) {
-                    case 0: break
-                    case 1:
-                        setLines([statements[0]])
-                        break
-                    case 2:
-                        setLines([statements[0], statements[1]])
-                        break
-                    case 3:
-                        setStatements(states => states.map((state, i) => {
-                            if (i === 0) return <span className={LINE_CLASSNAME}>집합 B는 문제의 조건을 충족하는 <u>임의의</u> 집합이다</span>
-                            return state
-                        }))
-                        setLines([statements[0], statements[1]])
-                        break
-                    case 4:
-                        statements[0].props.className += ' ' + LINE_DISAPPEAR_CLASSNAME
-                        statements[1].props.className += ' ' + LINE_DISAPPEAR_CLASSNAME
-                        lines.push(statements[0])
-                        lines.push(statements[1])
-                        break
-                }
-            }, [index])
+            ]
+            let lines = []
+            switch (index) {
+                case 0: break
+                case 1:
+                    lines.push(statements[0])
+                    break
+                case 2:
+                    lines.push(statements[0])
+                    lines.push(statements[1])
+                    break
+                case 3:
+                    modifyLine(statements[0], <React.Fragment>집합 B는 문제의 조건을 충족하는 <u>임의의</u> 집합이다</React.Fragment>)
+                    lines.push(statements[0])
+                    lines.push(statements[1])
+                    break
+                case 4:
+                    modifyLine(statements[0], <React.Fragment>집합 B는 문제의 조건을 충족하는 <u>임의의</u> 집합이다</React.Fragment>)
+                    lines.push(makeDisappear(statements[0]))
+                    lines.push(makeDisappear(statements[1]))
+                    break
+            }
             return (
                 <article id="account" onClick={() => setIndex(prev => prev + 1)}>
                     {lines}
