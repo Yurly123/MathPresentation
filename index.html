@@ -25,7 +25,7 @@
         const LINE_DISAPPEAR_CLASSNAME = 'line-disappear'
 
         function Line({ children }) {
-            return <span className={LINE_CLASSNAME}>{ children }</span>
+            return <span className={LINE_CLASSNAME}>{children}</span>
         }
 
         function changeElement(arr, index, newElement) {
@@ -38,52 +38,56 @@
         }
     </script>
     <script type="text/babel">
-            function Account() {
-                const [index, setIndex] = React.useState(0)
-                const [lines, setLines] = React.useState([])
-                const [statements, setStatements] = React.useState([
-                    <Line>집합 B는 문제의 조건을 충족하는 임의의 집합이다</Line>,
-                    <Line>B = {'{'}9, □, □, □{'}'}</Line>,
-                    <Line>Other lines</Line>,
-                ])
+        function Account() {
+            const [index, setIndex] = React.useState(0)
+            const [lines, setLines] = React.useState([])
+            const [statements, setStatements] = React.useState([
+                <Line>집합 B는 문제의 조건을 충족하는 임의의 집합이다</Line>,
+                <Line>B = {'{'}9, □, □, □{'}'}</Line>,
+                <Line>Other lines</Line>,
+            ])
 
-                React.useEffect(() => {
-                    switch (index) {
-                        case 0: break
-                        case 1:
-                            setLines(prev => [...prev, 0])
-                            break
-                        case 2:
-                            setLines(prev => [...prev, 1])
-                            break
-                        case 3:
-                            setStatements(prev => changeElement(prev, 0, <Line>
-                                adfasdf집합 B는 문제의 조건을 충족하는 <u>임의의</u> 집합이다
-                            </Line>))
-                            break
-                        case 4:
-                            modifyLine(statements[0], <React.Fragment>집합 B는 문제의 조건을 충족하는 <u>임의의</u> 집합이다</React.Fragment>)
-                            lines.push(makeDisappear(statements[0]))
-                            lines.push(makeDisappear(statements[1]))
-                            break
-                    }
-                }, [index])
+            React.useEffect(() => {
+                switch (index) {
+                    case 0: break
+                    case 1:
+                        setLines(prev => [...prev, 0])
+                        break
+                    case 2:
+                        setLines(prev => [...prev, 1])
+                        break
+                    case 3:
+                        setStatements(prev => changeElement(prev, 0, <Line>
+                            adfasdf집합 B는 문제의 조건을 충족하는 <u>임의의</u> 집합이다
+                        </Line>))
+                        setIndex(prev => prev + 1000)
+                        break
+                    //case 4:
+                    //modifyLine(statements[0], <React.Fragment>집합 B는 문제의 조건을 충족하는 <u>임의의</u> 집합이다</React.Fragment>)
+                    //lines.push(makeDisappear(statements[0]))
+                    //lines.push(makeDisappear(statements[1]))
+                    //break
+                }
+            }, [index])
 
-                return (
-                    <div onClick={() => setIndex(prev => prev + 1)}>
-                        <header className="border">
-                            <span>집합 A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'} 의 부분집합 중에서 다음을 구하시오</span>
-                            <br />
-                            {index == 0 ? <span>(1) 원소의 개수가 4이고 1을 반드시 원소로 갖는 집합의 개수</span> : null}
-                            {index == 1 ? <span>(2) 원소의 개수가 3이고 적어도 한 개의 원소로 갖는 집합의 개수</span> : null}
-                        </header>
-                        <article id="account">
-                            {lines.map(line => statements[line])}
-                            {statements}
-                        </article>
-                    </div>
-                )
+            function onClick() {
+                if (index >= 1000) setIndex(prev => prev - 1000)
+                setIndex(prev => prev + 1)
             }
+            return (
+                <div onClick={onClick}>
+                    <header className="border">
+                        <span>집합 A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'} 의 부분집합 중에서 다음을 구하시오</span>
+                        <br />
+                        {index == 0 ? <span>(1) 원소의 개수가 4이고 1을 반드시 원소로 갖는 집합의 개수</span> : null}
+                        {index == 1 ? <span>(2) 원소의 개수가 3이고 적어도 한 개의 원소로 갖는 집합의 개수</span> : null}
+                    </header>
+                    <article id="account">
+                        {lines.map(line => statements[line])}
+                    </article>
+                </div>
+            )
+        }
     </script>
     <script type="text/babel">
         function App() {
