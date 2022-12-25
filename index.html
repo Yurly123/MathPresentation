@@ -23,9 +23,12 @@
     <script type="text/babel">
         const LINE_CLASSNAME = 'line'
         const LINE_DISAPPEAR_CLASSNAME = 'line-disappear'
+        const SECOND_ACCOUNT_INDEX = 10
 
-        function Line({ children }) {
-            return <span className={LINE_CLASSNAME}>{children}</span>
+        function Line({ children, disappear }) {
+            let className = LINE_CLASSNAME
+            if (disappear) className += ' ' + LINE_DISAPPEAR_CLASSNAME
+            return <span className={className}>{children}</span>
         }
 
         function changeElement(arr, index, newElement) {
@@ -33,7 +36,7 @@
             return arr
         }
         function makeDisappear(statement) {
-            statement.props.className += ' ' + LINE_DISAPPEAR_CLASSNAME
+            statement = <Line disappear>{statement.props.children}</Line>
             return statement
         }
     </script>
@@ -58,29 +61,37 @@
                         break
                     case 3:
                         setStatements(prev => changeElement(prev, 0, <Line>
-                            adfasdf집합 B는 문제의 조건을 충족하는 <u>임의의</u> 집합이다
+                            집합 B는 문제의 조건을 충족하는 <u>임의의</u> 집합이다
                         </Line>))
                         setIndex(prev => prev + 1000)
                         break
-                    //case 4:
-                    //modifyLine(statements[0], <React.Fragment>집합 B는 문제의 조건을 충족하는 <u>임의의</u> 집합이다</React.Fragment>)
-                    //lines.push(makeDisappear(statements[0]))
-                    //lines.push(makeDisappear(statements[1]))
-                    //break
+                    case 4:
+                        setStatements(prev => {
+                            lines.forEach(line => prev[line] = makeDisappear(prev[line]))
+                            return prev
+                        })
+                        setIndex(prev => prev + 1000)
+                        break
+                    case 5:
+                        setLines([2])
+                        break
                 }
             }, [index])
 
             function onClick() {
-                if (index >= 1000) setIndex(prev => prev - 1000)
-                setIndex(prev => prev + 1)
+                setIndex(prev => {
+                    while (prev >= 1000) prev -= 1000
+                    return prev + 1
+                })
             }
             return (
                 <div onClick={onClick}>
                     <header className="border">
                         <span>집합 A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'} 의 부분집합 중에서 다음을 구하시오</span>
                         <br />
-                        {index == 0 ? <span>(1) 원소의 개수가 4이고 1을 반드시 원소로 갖는 집합의 개수</span> : null}
-                        {index == 1 ? <span>(2) 원소의 개수가 3이고 적어도 한 개의 원소로 갖는 집합의 개수</span> : null}
+                        {(index < 1000 ? index : index - 1000) <= SECOND_ACCOUNT_INDEX ?
+                            <span>(1) 원소의 개수가 4이고 1을 반드시 원소로 갖는 집합의 개수</span> :
+                            <span>(2) 원소의 개수가 3이고 적어도 한 개의 원소로 갖는 집합의 개수</span>}
                     </header>
                     <article id="account">
                         {lines.map(line => statements[line])}

@@ -20,6 +20,14 @@ header * {
     font-size: 5vmin;
 }
 
+.border {
+    text-shadow:
+        0.3vmin 0.3vmin black,
+        -0.3vmin 0.3vmin black,
+        0.3vmin -0.3vmin black,
+        -0.3vmin -0.3vmin black;
+}
+
 #account {
     display: flex;
     flex-direction: column;
