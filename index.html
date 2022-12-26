@@ -24,11 +24,19 @@
         const LINE_CLASSNAME = 'line'
         const LINE_DISAPPEAR_CLASSNAME = 'line-disappear'
         const SECOND_ACCOUNT_INDEX = 10
+        const BIG_NUMBER_TO_FORCE_RENDER = 114514
 
         function Line({ children, disappear }) {
             let className = LINE_CLASSNAME
             if (disappear) className += ' ' + LINE_DISAPPEAR_CLASSNAME
             return <span className={className}>{children}</span>
+        }
+        function Combination({ n='n', r='r' }) {
+            return (<React.Fragment>
+                <sub><small>{n}</small></sub>
+                C
+                <sub><small>{r}</small></sub>
+            </React.Fragment>)
         }
 
         function changeElement(arr, index, newElement) {
@@ -39,6 +47,14 @@
             statement = <Line disappear>{statement.props.children}</Line>
             return statement
         }
+        function changeIndexToForceRender(prevIndex) {
+            return prevIndex + BIG_NUMBER_TO_FORCE_RENDER
+        }
+        function substractBigNumber(n) {
+            if (n >= BIG_NUMBER_TO_FORCE_RENDER)
+                n -= BIG_NUMBER_TO_FORCE_RENDER
+            return n
+        }
     </script>
     <script type="text/babel">
         function Account() {
@@ -47,10 +63,25 @@
             const [statements, setStatements] = React.useState([
                 <Line>집합 B는 문제의 조건을 충족하는 임의의 집합이다</Line>,
                 <Line>B = {'{'}9, □, □, □{'}'}</Line>,
-                <Line>Other lines</Line>,
+                <Line>A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'}</Line>,
+                <Line>B가 될 수 있는 집합의 개수</Line>,
+                <Line>= <Combination n={8} r={3} /></Line>,
+                <Line><img src="https://latex.codecogs.com/svg.image?\huge&space;=\frac{8\times7\times6}{3\times2\times1}" /></Line>,
+                <Line>= 56</Line>,
+                <Line>집합 B는 문제의 조건을 충족하는 임의의 집합이다</Line>,
+                <Line>B = {'{'}2n, □, □{'}'} (n은 자연수)</Line>,
+                <Line>A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'}</Line>,
+                <Line>B가 될 수 있는 집합의 개수</Line>,
+                <Line>= 적어도 하나의 짝수를 원소로 갖는 집합의 개수</Line>,
+                <Line>= 모든 집합의 개수 - 홀수 만을 가지는 집합의 개수</Line>,
+                <Line>= <Combination n={9} r={3} /> - <Combination n={5} r={3} /></Line>,
+                <Line><img src="https://latex.codecogs.com/svg.image?\huge&space;=\frac{9\times8\times7}{3\times2\times1}-\frac{5\times4\times3}{3\times2\times1}" /></Line>,
+                <Line>= 84 - 10 = 74</Line>,
             ])
 
-            React.useEffect(() => {
+            function applyIndexChange() {
+                setLines(prev => [...prev, index])
+                return
                 switch (index) {
                     case 0: break
                     case 1:
@@ -63,34 +94,31 @@
                         setStatements(prev => changeElement(prev, 0, <Line>
                             집합 B는 문제의 조건을 충족하는 <u>임의의</u> 집합이다
                         </Line>))
-                        setIndex(prev => prev + 1000)
+                        setIndex(changeIndexToForceRender)
                         break
                     case 4:
-                        setStatements(prev => {
-                            lines.forEach(line => prev[line] = makeDisappear(prev[line]))
-                            return prev
-                        })
-                        setIndex(prev => prev + 1000)
+                        setLines(prev => [...prev, 2])
                         break
                     case 5:
-                        setLines([2])
+                        setStatements(prev => changeElement(prev, 0, makeDisappear(prev[0])))
+                        setIndex(changeIndexToForceRender)
+                        break
+                    case 6:
                         break
                 }
-            }, [index])
+            }
+            React.useEffect(applyIndexChange, [index])
 
             function onClick() {
-                setIndex(prev => {
-                    while (prev >= 1000) prev -= 1000
-                    return prev + 1
-                })
+                setIndex(prev => substractBigNumber(prev) + 1)
             }
             return (
                 <div onClick={onClick}>
                     <header className="border">
                         <span>집합 A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'} 의 부분집합 중에서 다음을 구하시오</span>
                         <br />
-                        {(index < 1000 ? index : index - 1000) <= SECOND_ACCOUNT_INDEX ?
-                            <span>(1) 원소의 개수가 4이고 1을 반드시 원소로 갖는 집합의 개수</span> :
+                        {substractBigNumber(index) <= SECOND_ACCOUNT_INDEX ?
+                            <span>(1) 원소의 개수가 4이고 9을 반드시 원소로 갖는 집합의 개수</span> :
                             <span>(2) 원소의 개수가 3이고 적어도 한 개의 원소로 갖는 집합의 개수</span>}
                     </header>
                     <article id="account">
