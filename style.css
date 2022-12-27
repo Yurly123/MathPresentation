@@ -51,3 +51,8 @@ header * {
     transition: display 1s;
     animation: line-disappear 1s ease-in-out forwards;
 }
+
+u {
+    text-decoration-color: red;
+    text-decoration-style: wavy;
+}

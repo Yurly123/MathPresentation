@@ -23,20 +23,29 @@
     <script type="text/babel">
         const LINE_CLASSNAME = 'line'
         const LINE_DISAPPEAR_CLASSNAME = 'line-disappear'
-        const SECOND_ACCOUNT_INDEX = 10
+        const FIRST_ACCOUNT_START_INDEX = 1
+        const SECOND_ACCOUNT_START_INDEX = 18
         const BIG_NUMBER_TO_FORCE_RENDER = 114514
 
         function Line({ children, disappear }) {
             let className = LINE_CLASSNAME
-            if (disappear) className += ' ' + LINE_DISAPPEAR_CLASSNAME
+            if (disappear)
+                className += ' ' + LINE_DISAPPEAR_CLASSNAME
             return <span className={className}>{children}</span>
         }
-        function Combination({ n='n', r='r' }) {
+        function Combination({ n = 'n', r = 'r' }) {
             return (<React.Fragment>
                 <sub><small>{n}</small></sub>
                 C
                 <sub><small>{r}</small></sub>
             </React.Fragment>)
+        }
+        function MathExpression({ children }) {
+            const latexUrl = `https://latex.codecogs.com/svg.image?\\huge&space;`
+            let mathExpression = children
+            if (Array.isArray(mathExpression))
+                mathExpression = mathExpression.join('')
+            return <img src={`${latexUrl}${mathExpression}`} />
         }
 
         function changeElement(arr, index, newElement) {
@@ -55,57 +64,144 @@
                 n -= BIG_NUMBER_TO_FORCE_RENDER
             return n
         }
+
+        const initialStatement = [
+            <Line>집합 B는 문제의 조건을 충족하는 임의의 집합이다</Line>,
+            <Line>B = {'{9, □, □, □}'}</Line>,
+            <Line>A = {'{1, 2, 3, 4, 5, 6, 7, 8, 9}'}</Line>,
+            <Line>B가 될 수 있는 집합의 개수</Line>,
+            <Line>= <Combination n={8} r={3} /></Line>,
+            <Line><MathExpression>
+                =\frac{'{'}8\times7\times6{'}{'}3\times2\times1{'}'}
+            </MathExpression></Line>,
+            <Line>= 56</Line>,
+            <Line>집합 B는 문제의 조건을 충족하는 임의의 집합이다</Line>,
+            <Line>B = {'{'}2n, □, □{'}'} (n은 자연수)</Line>,
+            <Line>A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'}</Line>,
+            <Line>B가 될 수 있는 집합의 개수</Line>,
+            <Line>= 적어도 하나의 짝수를 원소로 갖는 집합의 개수</Line>,
+            <Line>(단, 원소의 개수가 3이고 A의 부분집합인 집합만 고려했을때)</Line>,
+            <Line>= 모든 집합의 개수 - 홀수 만을 가지는 집합의 개수</Line>,
+            <Line>= <Combination n={9} r={3} /> - <Combination n={5} r={3} /></Line>,
+            <Line><MathExpression>
+                =\frac{'{'}9\times8\times7{'}{'}3\times2\times1{'}'}-\frac{'{'}5\times4\times3{'}{'}3\times2\times1{'}'}
+            </MathExpression></Line>,
+            <Line>= 84 - 10 = 74</Line>,
+        ]
     </script>
     <script type="text/babel">
         function Account() {
             const [index, setIndex] = React.useState(0)
             const [lines, setLines] = React.useState([])
-            const [statements, setStatements] = React.useState([
-                <Line>집합 B는 문제의 조건을 충족하는 임의의 집합이다</Line>,
-                <Line>B = {'{'}9, □, □, □{'}'}</Line>,
-                <Line>A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'}</Line>,
-                <Line>B가 될 수 있는 집합의 개수</Line>,
-                <Line>= <Combination n={8} r={3} /></Line>,
-                <Line><img src="https://latex.codecogs.com/svg.image?\huge&space;=\frac{8\times7\times6}{3\times2\times1}" /></Line>,
-                <Line>= 56</Line>,
-                <Line>집합 B는 문제의 조건을 충족하는 임의의 집합이다</Line>,
-                <Line>B = {'{'}2n, □, □{'}'} (n은 자연수)</Line>,
-                <Line>A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'}</Line>,
-                <Line>B가 될 수 있는 집합의 개수</Line>,
-                <Line>= 적어도 하나의 짝수를 원소로 갖는 집합의 개수</Line>,
-                <Line>= 모든 집합의 개수 - 홀수 만을 가지는 집합의 개수</Line>,
-                <Line>= <Combination n={9} r={3} /> - <Combination n={5} r={3} /></Line>,
-                <Line><img src="https://latex.codecogs.com/svg.image?\huge&space;=\frac{9\times8\times7}{3\times2\times1}-\frac{5\times4\times3}{3\times2\times1}" /></Line>,
-                <Line>= 84 - 10 = 74</Line>,
-            ])
+            const [statements, setStatements] = React.useState(initialStatement)
 
             function applyIndexChange() {
-                setLines(prev => [...prev, index])
-                return
                 switch (index) {
-                    case 0: break
+                    case 0:
                     case 1:
-                        setLines(prev => [...prev, 0])
                         break
                     case 2:
-                        setLines(prev => [...prev, 1])
+                        setLines(prev => [...prev, 0])
                         break
                     case 3:
                         setStatements(prev => changeElement(prev, 0, <Line>
                             집합 B는 문제의 조건을 충족하는 <u>임의의</u> 집합이다
                         </Line>))
-                        setIndex(changeIndexToForceRender)
                         break
                     case 4:
-                        setLines(prev => [...prev, 2])
+                        setLines(prev => [...prev, 1])
                         break
                     case 5:
-                        setStatements(prev => changeElement(prev, 0, makeDisappear(prev[0])))
-                        setIndex(changeIndexToForceRender)
+                        setLines(prev => [...prev, 2])
                         break
                     case 6:
+                        setStatements(prev => changeElement(prev, 0, makeDisappear(prev[0])))
+                        break
+                    case 7:
+                        setLines(prev => prev.filter(line => line !== 0))
+                        break
+                    case 8:
+                        setLines(prev => [...prev, 3])
+                        break
+                    case 9:
+                        setStatements(prev => changeElement(prev, 1, <Line>
+                            B = {'{'}<u>9</u>{', □, □, □}'}
+                        </Line>))
+                        break
+                    case 10:
+                        setStatements(prev => changeElement(prev, 2, <Line>
+                            A = {'{'}<u>1, 2, 3, 4, 5, 6, 7, 8</u>{', 9}'}
+                        </Line>))
+                        break
+                    case 11:
+                        setLines(prev => [...prev, 4])
+                        break
+                    case 12:
+                        setLines(prev => [...prev, 5])
+                        break
+                    case 13:
+                        setLines(prev => [...prev, 6])
+                        break
+                    case 14:
+                        setStatements(prev => changeElement(prev, 6, <Line>
+                            = <u>56</u>
+                        </Line>))
+                        break
+                    case 15:
+                        setStatements(prev => {
+                            const disappearLines = lines.filter(line => line !== 6)
+                            disappearLines.forEach(line => changeElement(prev, line, makeDisappear(prev[line])))
+                            return prev
+                        })
+                        break
+                    case 16:
+                        setLines(prev => prev.filter(line => line === 6))
+                        break
+                    case 17:
+                        setStatements(prev => changeElement(prev, 6, makeDisappear(prev[6])))
+                        break
+                    case 18:
+                        setLines([])
+                        setStatements(initialStatement)
+                        break
+                    case 19:
+                        setLines(prev => [...prev, 7])
+                        break
+                    case 20:
+                        setStatements(prev => changeElement(prev, 7, <Line>
+                            집합 B는 문제의 조건을 충족하는 <u>임의의</u> 집합이다
+                        </Line>))
+                        break
+                    case 21:
+                        setLines(prev => [...prev, 8])
+                        break
+                    case 22:
+                        setLines(prev => [...prev, 9])
+                        break
+                    case 23:
+                        setStatements(prev => changeElement(prev, 7, makeDisappear(prev[7])))
+                        break
+                    case 24:
+                        setLines(prev => prev.filter(line => line !== 7))
+                        break
+                    case 25:
+                        setLines(prev => [...prev, 10])
+                        break
+                    case 26:
+                        setStatements(prev => changeElement(prev, 8, <Line>
+                            B = {'{'}<u>2n</u>, □, □{'}'} (n은 자연수)
+                        </Line>))
+                        break
+                    case 27:
+                        break
+                    case 114514:
+                        setStatements(prev => changeElement(prev, 9, <Line>
+                            A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'}
+                        </Line>))
                         break
                 }
+                if (index < BIG_NUMBER_TO_FORCE_RENDER)
+                    setIndex(changeIndexToForceRender)
             }
             React.useEffect(applyIndexChange, [index])
 
@@ -117,9 +213,10 @@
                     <header className="border">
                         <span>집합 A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'} 의 부분집합 중에서 다음을 구하시오</span>
                         <br />
-                        {substractBigNumber(index) <= SECOND_ACCOUNT_INDEX ?
-                            <span>(1) 원소의 개수가 4이고 9을 반드시 원소로 갖는 집합의 개수</span> :
-                            <span>(2) 원소의 개수가 3이고 적어도 한 개의 원소로 갖는 집합의 개수</span>}
+                        {substractBigNumber(index) < FIRST_ACCOUNT_START_INDEX ? null :
+                            substractBigNumber(index) < SECOND_ACCOUNT_START_INDEX ?
+                                <span>(1) 원소의 개수가 4이고 9을 반드시 원소로 갖는 집합의 개수</span> :
+                                <span>(2) 원소의 개수가 3이고 적어도 한 개의 짝수를 원소로 갖는 집합의 개수</span>}
                     </header>
                     <article id="account">
                         {lines.map(line => statements[line])}
