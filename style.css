@@ -29,10 +29,6 @@ header * {
         -3px -3px black;
 }
 
-.invisible {
-    opacity: 0%;
-}
-
 #account {
     display: flex;
     flex-direction: column;
@@ -41,7 +37,6 @@ header * {
     position: absolute;
     top: 250px;
     left: 0%;
-    transition: opacity 1s ease-in-out;
 }
 
 .line {
@@ -68,4 +63,22 @@ u.red {
 
 u.blue {
     text-decoration-color: blue;
+}
+
+.prob-1 {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 0%;
+    width: 50%;
+    border-right: 1px solid gray;
+}
+
+.prob-2 {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0%;
+    width: 50%;
+    border-left: 1px solid gray;
 }

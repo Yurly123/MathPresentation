@@ -23,15 +23,23 @@
     <script type="text/babel">
         const LINE_CLASSNAME = 'line'
         const LINE_DISAPPEAR_CLASSNAME = 'line-disappear'
+        const LINE_1_CLASSNAME = 'line-1'
+        const LINE_2_CLASSNAME = 'line-2'
         const FIRST_ACCOUNT_START_INDEX = 1
         const SECOND_ACCOUNT_START_INDEX = 18
         const END_ACCOUNT_INDEX = 41
+        const FIRST_ACCOUNT_END_STATEMENT_INDEX = 6
+        const SECOND_ACCOUNT_END_STATEMENT_INDEX = 16
         const BIG_NUMBER_TO_FORCE_RENDER = 114514
 
-        function Line({ children, disappear }) {
+        function Line({ children, disappear, problemNumber }) {
             let className = LINE_CLASSNAME
             if (disappear)
                 className += ' ' + LINE_DISAPPEAR_CLASSNAME
+            if (problemNumber === 1)
+                className += ' ' + LINE_1_CLASSNAME
+            if (problemNumber === 2)
+                className += ' ' + LINE_2_CLASSNAME
             return <span className={className}>{children}</span>
         }
         function Combination({ n = 'n', r = 'r' }) {
@@ -255,7 +263,11 @@
                         setStatements(prev => changeElement(prev, 16, makeDisappear(prev[16])))
                         break
                     case END_ACCOUNT_INDEX:
-                        setLines([])
+                        setLines(prev => {
+                            for (let i = 0; i < statements.length; ++i)
+                                prev[i] = i
+                            return prev
+                        })
                         setStatements(prev => prev.map(statement => makeAppear(statement)))
                         break
                 }
@@ -272,7 +284,7 @@
             }
             return (
                 <div onClick={onClick}>
-                    <header className={substractBigNumber(index) < END_ACCOUNT_INDEX ? 'border' : 'border invisible'}>
+                    <header className={'border ' + (substractBigNumber(index) < END_ACCOUNT_INDEX ? '' : LINE_DISAPPEAR_CLASSNAME)}>
                         <span>집합 A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'} 의 부분집합 중에서 다음을 구하시오</span>
                         <br />
                         {substractBigNumber(index) < FIRST_ACCOUNT_START_INDEX ? null :
@@ -280,9 +292,20 @@
                                 <span>(1) 원소의 개수가 4이고 9을 반드시 원소로 갖는 집합의 개수</span> :
                                 <span>(2) 원소의 개수가 3이고 적어도 한 개의 짝수를 원소로 갖는 집합의 개수</span>}
                     </header>
-                    <article id="account">
-                        {lines.map(line => statements[line])}
-                    </article>
+                    {substractBigNumber(index) < END_ACCOUNT_INDEX ?
+                        <article id="account">
+                            {lines.map(line => statements[line])}
+                        </article>
+                        :
+                        <React.Fragment>
+                            <section className="prob-1">{lines
+                                .filter(line => line <= FIRST_ACCOUNT_END_STATEMENT_INDEX)
+                                .map(line => statements[line])}</section>
+                            <section className="prob-2">{lines
+                                .filter(line => FIRST_ACCOUNT_END_STATEMENT_INDEX < line && line <= SECOND_ACCOUNT_END_STATEMENT_INDEX)
+                                .map(line => statements[line])}</section>
+                        </React.Fragment>
+                    }
                 </div>
             )
         }
