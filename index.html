@@ -259,8 +259,10 @@
                         setStatements(prev => prev.map(statement => makeAppear(statement)))
                         break
                 }
-                if (index < BIG_NUMBER_TO_FORCE_RENDER)
+                if (index < BIG_NUMBER_TO_FORCE_RENDER) {
+                    console.log('Current Index : ' + index)
                     setIndex(changeIndexToForceRender)
+                }
             }
             React.useEffect(applyIndexChange, [index])
 
@@ -270,16 +272,14 @@
             }
             return (
                 <div onClick={onClick}>
-                    {substractBigNumber(index) < END_ACCOUNT_INDEX ?
-                        <header className="border">
-                            <span>집합 A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'} 의 부분집합 중에서 다음을 구하시오</span>
-                            <br />
-                            {substractBigNumber(index) < FIRST_ACCOUNT_START_INDEX ? null :
-                                substractBigNumber(index) < SECOND_ACCOUNT_START_INDEX ?
-                                    <span>(1) 원소의 개수가 4이고 9을 반드시 원소로 갖는 집합의 개수</span> :
-                                    <span>(2) 원소의 개수가 3이고 적어도 한 개의 짝수를 원소로 갖는 집합의 개수</span>}
-                        </header>
-                        : null}
+                    <header className={substractBigNumber(index) < END_ACCOUNT_INDEX ? 'border' : 'border invisible'}>
+                        <span>집합 A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'} 의 부분집합 중에서 다음을 구하시오</span>
+                        <br />
+                        {substractBigNumber(index) < FIRST_ACCOUNT_START_INDEX ? null :
+                            substractBigNumber(index) < SECOND_ACCOUNT_START_INDEX ?
+                                <span>(1) 원소의 개수가 4이고 9을 반드시 원소로 갖는 집합의 개수</span> :
+                                <span>(2) 원소의 개수가 3이고 적어도 한 개의 짝수를 원소로 갖는 집합의 개수</span>}
+                    </header>
                     <article id="account">
                         {lines.map(line => statements[line])}
                     </article>
