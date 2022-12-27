@@ -25,6 +25,7 @@
         const LINE_DISAPPEAR_CLASSNAME = 'line-disappear'
         const FIRST_ACCOUNT_START_INDEX = 1
         const SECOND_ACCOUNT_START_INDEX = 18
+        const END_ACCOUNT_INDEX = 41
         const BIG_NUMBER_TO_FORCE_RENDER = 114514
 
         function Line({ children, disappear }) {
@@ -56,6 +57,10 @@
             statement = <Line disappear>{statement.props.children}</Line>
             return statement
         }
+        function makeAppear(statement) {
+            statement = <Line>{statement.props.children}</Line>
+            return statement
+        }
         function changeIndexToForceRender(prevIndex) {
             return prevIndex + BIG_NUMBER_TO_FORCE_RENDER
         }
@@ -79,9 +84,9 @@
             <Line>B = {'{'}2n, □, □{'}'} (n은 자연수)</Line>,
             <Line>A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'}</Line>,
             <Line>B가 될 수 있는 집합의 개수</Line>,
-            <Line>= 적어도 하나의 짝수를 원소로 갖는 집합의 개수</Line>,
-            <Line>(단, 원소의 개수가 3이고 A의 부분집합인 집합만 고려했을때)</Line>,
-            <Line>= 모든 집합의 개수 - 홀수 만을 가지는 집합의 개수</Line>,
+            <Line>= 적어도 <u className="red">하나의 짝수</u>를 원소로 갖는 집합의 개수</Line>,
+            <Line>(단, <u className="red">원소의 개수가 3</u>이고 <u className="red">A의 부분집합</u>인 집합만 고려했을때)</Line>,
+            <Line>= 모든 집합의 개수 - <u className="blue">홀수 만</u>을 가지는 집합의 개수</Line>,
             <Line>= <Combination n={9} r={3} /> - <Combination n={5} r={3} /></Line>,
             <Line><MathExpression>
                 =\frac{'{'}9\times8\times7{'}{'}3\times2\times1{'}'}-\frac{'{'}5\times4\times3{'}{'}3\times2\times1{'}'}
@@ -98,14 +103,14 @@
             function applyIndexChange() {
                 switch (index) {
                     case 0:
-                    case 1:
+                    case FIRST_ACCOUNT_START_INDEX:
                         break
                     case 2:
                         setLines(prev => [...prev, 0])
                         break
                     case 3:
                         setStatements(prev => changeElement(prev, 0, <Line>
-                            집합 B는 문제의 조건을 충족하는 <u>임의의</u> 집합이다
+                            집합 B는 문제의 조건을 충족하는 <u className="red">임의의</u> 집합이다
                         </Line>))
                         break
                     case 4:
@@ -125,12 +130,12 @@
                         break
                     case 9:
                         setStatements(prev => changeElement(prev, 1, <Line>
-                            B = {'{'}<u>9</u>{', □, □, □}'}
+                            B = {'{'}<u className="red">9</u>{', □, □, □}'}
                         </Line>))
                         break
                     case 10:
                         setStatements(prev => changeElement(prev, 2, <Line>
-                            A = {'{'}<u>1, 2, 3, 4, 5, 6, 7, 8</u>{', 9}'}
+                            A = {'{'}<u className="blue">1, 2, 3, 4, 5, 6, 7, 8</u>{', 9}'}
                         </Line>))
                         break
                     case 11:
@@ -144,7 +149,7 @@
                         break
                     case 14:
                         setStatements(prev => changeElement(prev, 6, <Line>
-                            = <u>56</u>
+                            = <u className="red">56</u>
                         </Line>))
                         break
                     case 15:
@@ -160,16 +165,16 @@
                     case 17:
                         setStatements(prev => changeElement(prev, 6, makeDisappear(prev[6])))
                         break
-                    case 18:
+                    case SECOND_ACCOUNT_START_INDEX:
                         setLines([])
-                        setStatements(initialStatement)
+                        setStatements(prev => prev.map(statement => makeAppear(statement)))
                         break
                     case 19:
                         setLines(prev => [...prev, 7])
                         break
                     case 20:
                         setStatements(prev => changeElement(prev, 7, <Line>
-                            집합 B는 문제의 조건을 충족하는 <u>임의의</u> 집합이다
+                            집합 B는 문제의 조건을 충족하는 <u className="red">임의의</u> 집합이다
                         </Line>))
                         break
                     case 21:
@@ -189,15 +194,69 @@
                         break
                     case 26:
                         setStatements(prev => changeElement(prev, 8, <Line>
-                            B = {'{'}<u>2n</u>, □, □{'}'} (n은 자연수)
+                            B = {'{'}<u className="red">2n</u>, □, □{'}'} (n은 자연수)
                         </Line>))
                         break
                     case 27:
+                        setLines(prev => [...prev, 11])
                         break
-                    case 114514:
+                    case 28:
+                        setLines(prev => [...prev, 12])
+                        break
+                    case 29:
+                        setStatements(prev => changeElement(prev, 12, makeDisappear(prev[12])))
+                        break
+                    case 30:
+                        setLines(prev => {
+                            prev = prev.filter(line => line !== 12)
+                            return [...prev, 13]
+                        })
+                        setStatements(prev => changeElement(prev, 12, makeAppear(prev[12])))
+                        break
+                    case 31:
                         setStatements(prev => changeElement(prev, 9, <Line>
-                            A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'}
+                            A = {'{'}<u className="blue">1</u>, 2, <u className="blue">3</u>, 4, <u className="blue">5</u>, 6, <u className="blue">7</u>, 8, <u className="blue">9</u>{'}'}
                         </Line>))
+                        break
+                    case 32:
+                        setLines(prev => [...prev, 12])
+                        break
+                    case 33:
+                        setStatements(prev => changeElement(prev, 12, makeDisappear(prev[12])))
+                        break
+                    case 34:
+                        setLines(prev => {
+                            prev = prev.filter(line => line !== 12)
+                            return [...prev, 14]
+                        })
+                        break
+                    case 35:
+                        setLines(prev => [...prev, 15])
+                        break
+                    case 36:
+                        setLines(prev => [...prev, 16])
+                        break
+                    case 37:
+                        setStatements(prev => changeElement(prev, 16, <Line>
+                            = <u className="red">74</u>
+                        </Line>))
+                        break
+                    case 38:
+                        setStatements(prev => {
+                            const disappearLines = lines.filter(line => line !== 16)
+                            disappearLines.forEach(line => changeElement(prev, line, makeDisappear(prev[line])))
+                            return prev
+                        })
+                        break
+                    case 39:
+                        setLines(prev => prev.filter(line => line === 16))
+                        break
+                    case 40:
+                        setStatements(prev => changeElement(prev, 16, makeDisappear(prev[16])))
+                        break
+                    case END_ACCOUNT_INDEX:
+                        setLines([])
+                        setStatements(prev => prev.map(statement => makeAppear(statement)))
                         break
                 }
                 if (index < BIG_NUMBER_TO_FORCE_RENDER)
@@ -206,18 +265,21 @@
             React.useEffect(applyIndexChange, [index])
 
             function onClick() {
-                setIndex(prev => substractBigNumber(prev) + 1)
+                if (substractBigNumber(index) < END_ACCOUNT_INDEX)
+                    setIndex(prev => substractBigNumber(prev) + 1)
             }
             return (
                 <div onClick={onClick}>
-                    <header className="border">
-                        <span>집합 A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'} 의 부분집합 중에서 다음을 구하시오</span>
-                        <br />
-                        {substractBigNumber(index) < FIRST_ACCOUNT_START_INDEX ? null :
-                            substractBigNumber(index) < SECOND_ACCOUNT_START_INDEX ?
-                                <span>(1) 원소의 개수가 4이고 9을 반드시 원소로 갖는 집합의 개수</span> :
-                                <span>(2) 원소의 개수가 3이고 적어도 한 개의 짝수를 원소로 갖는 집합의 개수</span>}
-                    </header>
+                    {substractBigNumber(index) < END_ACCOUNT_INDEX ?
+                        <header className="border">
+                            <span>집합 A = {'{'}1, 2, 3, 4, 5, 6, 7, 8, 9{'}'} 의 부분집합 중에서 다음을 구하시오</span>
+                            <br />
+                            {substractBigNumber(index) < FIRST_ACCOUNT_START_INDEX ? null :
+                                substractBigNumber(index) < SECOND_ACCOUNT_START_INDEX ?
+                                    <span>(1) 원소의 개수가 4이고 9을 반드시 원소로 갖는 집합의 개수</span> :
+                                    <span>(2) 원소의 개수가 3이고 적어도 한 개의 짝수를 원소로 갖는 집합의 개수</span>}
+                        </header>
+                        : null}
                     <article id="account">
                         {lines.map(line => statements[line])}
                     </article>

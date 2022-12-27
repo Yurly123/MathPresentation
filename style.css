@@ -53,6 +53,11 @@ header * {
 }
 
 u {
-    text-decoration-color: red;
     text-decoration-style: wavy;
+}
+u.red {
+    text-decoration-color: red;
+}
+u.blue {
+    text-decoration-color: blue;
 }
